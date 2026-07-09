@@ -1,120 +1,222 @@
+<div align="center">
+
 # 🎬 EmotiStream AI
 
-> Streaming that understands you — powered by GPT-4 Vision + TMDB
+### 🤖 AI-Powered Emotion-Based Movie Recommendation Platform
 
-## Project Structure
+Discover movies that truly match your emotions with the power of Artificial Intelligence.
 
+<br>
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Now-success?style=for-the-badge)](https://emoti-stream-ai.vercel.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge\&logo=vite)
+![TMDB API](https://img.shields.io/badge/TMDB-API-01D277?style=for-the-badge)
+![AI Powered](https://img.shields.io/badge/AI-Powered-blueviolet?style=for-the-badge)
+
+### 🌐 Live Website
+
+### **https://emoti-stream-ai.vercel.app/**
+
+⭐ If you enjoy this project, consider giving it a star!
+
+</div>
+
+---
+
+# 📖 Overview
+
+**EmotiStream AI** is an AI-powered emotion-based movie recommendation platform designed to provide personalized movie suggestions based on the user's emotional state. Unlike traditional movie applications that rely only on genres or popularity, EmotiStream AI intelligently recommends movies that align with the user's current mood, creating a more meaningful and engaging entertainment experience.
+
+The platform combines Artificial Intelligence with real-time movie data from the TMDB API and presents everything through a modern, Netflix-inspired interface. Built using React and Vite, it delivers a fast, responsive, and visually appealing experience across devices.
+
+---
+
+# ✨ Features
+
+* 🤖 AI-powered emotion analysis and movie recommendations
+* 🎭 Personalized suggestions based on user emotions
+* 😊 Facial emotion recognition using webcam
+* 🔐 User Authentication
+* ❤️ Personalized Watchlist
+* 🎥 Movie trailers
+* 🎬 Netflix-inspired modern UI
+* 🔥 Trending Movies
+* ⭐ Top Rated Movies
+* 💥 Genre-wise movie collections
+* 🔍 Smart movie search
+* 📱 Fully responsive design
+* ⚡ Lightning-fast performance with Vite
+* 🎨 Beautiful dark-themed interface
+* 🌐 Real-time movie data using TMDB API
+
+---
+
+# 🚀 Live Demo
+
+Experience EmotiStream AI without installing anything.
+
+👉 **https://emoti-stream-ai.vercel.app/**
+
+---
+
+# 🛠 Tech Stack
+
+| Category        | Technologies                        |
+| --------------- | ----------------------------------- |
+| Frontend        | React.js, Vite                      |
+| Programming     | JavaScript (ES6+)                   |
+| Styling         | CSS3                                |
+| AI              | Emotion-Based Recommendation System |
+| API             | TMDB API                            |
+| Deployment      | Vercel                              |
+| Version Control | Git & GitHub                        |
+
+---
+
+# 📂 Project Structure
+
+```text
+EmotiStream-AI/
+│
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── .env
+├── package.json
+├── vite.config.js
+└── README.md
 ```
-emotistream/
-├── server.js          ← Node.js Express backend
-├── package.json       ← dependencies
-├── .env               ← API keys (never share this)
-├── .gitignore         ← keeps .env out of git
-└── public/
-    └── index.html     ← full frontend
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/Dipan2208/EmotiStream-AI.git
 ```
 
-## Quick Start (3 steps)
+Navigate to the project
 
-### Step 1 — Install Node.js
-Download from https://nodejs.org (choose LTS version)
+```bash
+cd EmotiStream-AI
+```
 
-### Step 2 — Install dependencies
-Open a terminal in the `emotistream` folder and run:
+Install dependencies
+
 ```bash
 npm install
 ```
 
-### Step 3 — Start the server
-```bash
-npm start
-```
+Run the application
 
-Then open your browser at:
-```
-http://localhost:3000
-```
-
-That's it! 🎉
-
----
-
-## Features
-
-| Feature | Tech |
-|---|---|
-| Real movie data & posters | TMDB API |
-| Hero carousel (Now Playing) | TMDB /now_playing |
-| Trending / Top Rated rows | TMDB /trending + /top_rated |
-| Movie detail modal with cast | TMDB /movie/:id + /credits |
-| Live search | TMDB /search/movie |
-| Mood-based suggestions | TMDB /discover by genre |
-| AI emotion detection | GPT-4o Vision |
-| Webcam capture | Browser MediaDevices API |
-
----
-
-## How the AI Works
-
-```
-1. Click "Scan My Emotion"
-2. Allow camera access in browser
-3. Click "Capture & Detect"
-4. Screenshot → sent to Node.js backend
-5. Backend sends image to GPT-4o Vision
-6. GPT-4o returns: emotion, confidence, description
-7. Backend maps emotion → TMDB genre IDs
-8. Fetches matching movies from TMDB
-9. Frontend shows results instantly
-```
-
-### Emotion → Genre Mapping
-
-| Emotion | Genres |
-|---|---|
-| 😊 Happy | Comedy, Family, Animation |
-| 😢 Sad | Drama, Romance |
-| 😠 Angry | Action, Thriller, Crime |
-| 🤩 Excited | Action, Adventure, Sci-Fi |
-| 😌 Relaxed | Documentary, History, Music |
-| 😐 Bored | Mystery, Sci-Fi, Fantasy |
-| 😨 Fearful | Horror, Thriller |
-| 😮 Surprised | Mystery, Sci-Fi, Action |
-
----
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | /api/nowplaying | Hero carousel movies |
-| GET | /api/trending | Trending this week |
-| GET | /api/toprated | All-time top rated |
-| GET | /api/movies/mood?emotion=happy | Mood-based movies |
-| GET | /api/search?q=inception | Search movies |
-| GET | /api/movie/:id | Full movie detail + cast |
-| POST | /api/detect-emotion | GPT-4 Vision face scan |
-
----
-
-## Development Mode (auto-restart on save)
 ```bash
 npm run dev
 ```
 
-## Deploying to the Web (later)
-1. Push to GitHub
-2. Deploy to Railway.app or Render.com (free tier)
-3. Add environment variables in their dashboard
-4. Connect your custom domain
+---
+
+# 🔑 Environment Variables
+
+Create a `.env` file in the root directory.
+
+```env
+VITE_TMDB_API_KEY=YOUR_API_KEY
+```
+
+Generate your API key from TMDB and keep it private.
 
 ---
 
-## Environment Variables (.env)
-```
-OPENAI_API_KEY=sk-...
-TMDB_API_KEY=...
-PORT=3000
-```
+# 📸 Screenshots
 
-⚠️ Never commit .env to GitHub. It's already in .gitignore.
+<img width="2866" height="1478" alt="Screenshot 2026-07-09 181113" src="https://github.com/user-attachments/assets/6ed4100e-e726-4b38-a2f8-502ee708a255" />
+<img width="2866" height="1470" alt="Screenshot 2026-07-09 181047" src="https://github.com/user-attachments/assets/f5046976-494c-4b68-aba5-72b95be0a077" />
+<img width="2866" height="1470" alt="Screenshot 2026-07-09 180954" src="https://github.com/user-attachments/assets/8596099c-6a94-4a3e-94cb-8ba254dc4e34" />
+
+---
+
+# 🎯 Future Enhancements
+
+* 🗣️ Voice-based emotion detection
+* 🌍 Multi-language support
+* 📈 AI learning from user preferences
+* ☁️ Cloud database integration
+* 📱 Progressive Web App (PWA)
+
+---
+
+# 🤝 Contributing
+
+Contributions are always welcome!
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes.
+4. Push to your branch.
+5. Open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+See the **LICENSE** file for more details.
+
+---
+
+# 👩‍💻 Developer
+
+## Dipanjana Ghosh
+
+**Aspiring Full Stack Developer | AI Enthusiast | Web Developer**
+
+📧 **Email**
+
+[dipanjanaghosh489@gmail.com](mailto:dipanjanaghosh489@gmail.com)
+
+🐙 **GitHub**
+
+https://github.com/Dipan2208
+
+💼 **LinkedIn**
+
+https://www.linkedin.com/in/dipanjana-ghosh-a99a522b6?utm_source=share_via&utm_content=profile&utm_medium=member_android
+
+🌐 **Live Demo**
+
+https://emoti-stream-ai.vercel.app/
+
+---
+
+# ⭐ Support the Project
+
+If you enjoyed this project:
+
+⭐ Star the repository
+
+🍴 Fork it
+
+💡 Share it with others
+
+Every star motivates me to build even better AI-powered applications.
+
+---
+
+<div align="center">
+
+## 🚀 Built with React, Vite, Artificial Intelligence & TMDB API
+
+### ❤️ Made with passion by Dipanjana Ghosh
+
+</div>
