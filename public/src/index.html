@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EmotiStream AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="particles"></div>
+
+<!-- SPLASH -->
+<div id="splash">
+  <svg id="splash-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="fg" cx="40%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#FFB347"/><stop offset="40%" stop-color="#FF6B6B"/>
+        <stop offset="70%" stop-color="#9B59B6"/><stop offset="100%" stop-color="#3498DB"/>
+      </radialGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <g class="splash-rays" stroke-width="4" stroke-linecap="round">
+      <line x1="100" y1="8" x2="100" y2="20" stroke="#9B59B6"/>
+      <line x1="130" y1="13" x2="124" y2="24" stroke="#7c3aed"/>
+      <line x1="155" y1="28" x2="147" y2="36" stroke="#3498DB"/>
+      <line x1="68" y1="13" x2="74" y2="24" stroke="#FFB347"/>
+      <line x1="44" y1="28" x2="52" y2="36" stroke="#FF6B6B"/>
+      <line x1="145" y1="52" x2="139" y2="58" stroke="#3498DB"/>
+      <line x1="55" y1="52" x2="61" y2="58" stroke="#FFB347"/>
+      <line x1="163" y1="68" x2="156" y2="73" stroke="#9B59B6"/>
+    </g>
+    <circle cx="100" cy="112" r="75" fill="url(#fg)"/>
+    <path d="M74 98 Q80 92 86 98" stroke="#1a0a00" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M114 95 Q118 90 122 95" stroke="#1a0a00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M116 100 Q118 97 120 100" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="122" cy="111" rx="3" ry="4.5" fill="rgba(52,152,219,.9)"/>
+    <ellipse cx="72" cy="116" rx="9" ry="5" fill="rgba(255,100,100,.3)"/>
+    <circle cx="100" cy="112" r="11" fill="rgba(255,255,255,0.92)" filter="url(#glow)"/>
+    <polygon points="97,107 97,117 107,112" fill="#1a0a00"/>
+    <path d="M68 128 Q82 140 94 132" stroke="#1a0a00" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M106 136 Q118 126 132 132" stroke="#1a0a00" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div style="text-align:center">
+    <div class="splash-title"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+    <div class="splash-sub" style="margin-top:5px">Streaming that understands you</div>
+  </div>
+  <div class="sbar"><div class="sbar-fill" id="splashBar"></div></div>
+</div>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="brand">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="mg" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#3498DB"/></radialGradient></defs>
+      <circle cx="20" cy="22" r="16" fill="url(#mg)"/>
+      <circle cx="20" cy="22" r="5" fill="rgba(255,255,255,.85)"/>
+      <polygon points="18.5,20 18.5,24 23,22" fill="#1a0a00"/>
+    </svg>
+    <div class="brand-name"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+  </div>
+  <div class="profile-card" onclick="switchProfile()" title="Switch Profile">
+    <div class="avatar" id="profile-avatar-display">🎬</div>
+    <div>
+      <div class="p-name" id="profile-name-display">Loading...</div>
+      <div class="p-switch">Switch Profile</div>
+    </div>
+  </div>
+  <button class="nav-item" onclick="signOut()" style="color:#ef4444;margin-bottom:8px">
+    <span class="nav-icon">🚪</span> Sign Out
+  </button>
+  <nav>
+    <button class="nav-item active" onclick="showPage('home',this)"><span class="nav-icon">🏠</span> Home</button>
+    <button class="nav-item" onclick="showPage('trending',this)"><span class="nav-icon">🔥</span> Trending</button>
+    <button class="nav-item" onclick="showPage('movies',this)"><span class="nav-icon">🎬</span> Movies</button>
+    <button class="nav-item" onclick="showPage('tvshows',this)"><span class="nav-icon">📺</span> TV Shows</button>
+    <button class="nav-item" onclick="showPage('mylist',this)"><span class="nav-icon">➕</span> My List</button>
+    <button class="nav-item" onclick="showPage('history',this)"><span class="nav-icon">⏱</span> History</button>
+    <button class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span> Settings</button>
+  </nav>
+  <div class="sidebar-mood">
+    <div class="sm-title">How are you feeling?</div>
+    <div class="sm-sub">We will suggest the best!</div>
+    <div class="mood-emojis">
+      <span onclick="fetchMoodMovies('happy')" title="Happy">😊</span>
+      <span onclick="fetchMoodMovies('sad')" title="Sad">😢</span>
+      <span onclick="fetchMoodMovies('excited')" title="Excited">🤩</span>
+      <span onclick="fetchMoodMovies('angry')" title="Angry">😠</span>
+    </div>
+  </div>
+  <div class="premium-card">
+    <h4>Go Premium</h4>
+    <p>Unlock all content, no ads!</p>
+    <button class="btn-premium" onclick="openPremiumModal()">👑 Upgrade Now</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div id="main">
+  <header id="topbar">
+    <div class="search-wrap">
+      <span class="s-icon">🔍</span>
+      <input type="text" placeholder="Search movies, shows..." id="searchInput"/>
+      <div id="search-results"></div>
+    </div>
+    <div style="flex:1"></div>
+    <div class="notif-wrap" style="position:relative">
+      <div class="notif-btn" onclick="toggleNotifications()">🔔<span class="notif-badge" id="notif-badge">3</span></div>
+      <div id="notif-panel"></div>
+    </div>
+  </header>
+
+  <!-- ═══ HOME PAGE ═══ -->
+  <div class="page active" id="page-home">
+    <div id="hero">
+      <div class="hero-loading"><div class="spinner"></div></div>
+      <div class="hero-slides" id="heroSlides" style="display:none"></div>
+      <div class="hero-dots" id="heroDots" style="display:none"></div>
+    </div>
+    <div id="content">
+      <div id="ai-section">
+        <div class="ai-logo-wrap">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="ag" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#7c3aed"/></radialGradient></defs>
+            <circle cx="40" cy="44" r="32" fill="url(#ag)"/>
+            <circle cx="40" cy="44" r="7" fill="rgba(255,255,255,.88)"/>
+            <polygon points="37.5,40.5 37.5,47.5 44,44" fill="#1a0a00"/>
+            <path d="M28 38 Q32 34 36 38" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M44 36 Q47 32 50 36" stroke="#1a0a00" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <ellipse cx="50" cy="43" rx="2" ry="3" fill="rgba(52,152,219,.9)"/>
+            <path d="M24 54 Q33 62 39 57" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M41 58 Q47 52 56 56" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="ai-text">
+          <h3>AI Emotion Detection — Powered by GPT-4 Vision</h3>
+          <p>Let your camera read your face and instantly suggest the perfect movie. Real AI, real results — with free fallback if quota runs out.</p>
+          <div class="ai-actions">
+            <button class="btn-ai" onclick="openFaceModal()">📷 Scan My Emotion</button>
+            <button class="btn-ai-out" onclick="toggleMoodPicker()">🎭 Pick Mood Manually</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="emotion-result">
+        <div class="er-emoji" id="er-emoji"></div>
+        <div class="er-info"><strong id="er-title"></strong><span id="er-desc"></span></div>
+      </div>
+
+      <section class="mood-section" id="mood-picker" style="display:none">
+        <div class="section-title">How are you feeling today?</div>
+        <div class="mood-grid">
+          <div class="mood-card" data-mood="happy" onclick="fetchMoodMovies('happy')"><div class="mood-emoji">😊</div><div class="mood-text"><strong>Happy</strong><span>Feel Good</span></div></div>
+          <div class="mood-card" data-mood="sad" onclick="fetchMoodMovies('sad')"><div class="mood-emoji">😢</div><div class="mood-text"><strong>Sad</strong><span>Need a Hug</span></div></div>
+          <div class="mood-card" data-mood="bored" onclick="fetchMoodMovies('bored')"><div class="mood-emoji">😐</div><div class="mood-text"><strong>Bored</strong><span>Something Fun</span></div></div>
+          <div class="mood-card" data-mood="excited" onclick="fetchMoodMovies('excited')"><div class="mood-emoji">🤩</div><div class="mood-text"><strong>Excited</strong><span>High Energy</span></div></div>
+          <div class="mood-card" data-mood="relaxed" onclick="fetchMoodMovies('relaxed')"><div class="mood-emoji">😌</div><div class="mood-text"><strong>Relaxed</strong><span>Chill Vibes</span></div></div>
+          <div class="mood-card" data-mood="angry" onclick="fetchMoodMovies('angry')"><div class="mood-emoji">😠</div><div class="mood-text"><strong>Angry</strong><span>Let It Out</span></div></div>
+        </div>
+      </section>
+
+      <section class="row-section">
+        <div class="row-header">
+          <div class="row-title">🔥 Trending Now</div>
+          <div class="row-actions"><button class="see-all" onclick="showPage('trending',null)">See All</button>
+            <button class="row-btn" onclick="scrollRow('trending',-1)">‹</button>
+            <button class="row-btn" onclick="scrollRow('trending',1)">›</button>
+          </div>
+        </div>
+        <div class="cards-wrap"><div class="cards-row" id="row-trending"></div></div>
+      </section>
+
+      <section class="row-section">
+        <div class="row-header">
+          <div class="row-title">⭐ Top Rated</div>
+          <div class="row-actions"><button class="see-all" onclick="showPage('movies',null)">See All</button>
+            <button class="row-btn" onclick="scrollRow('toprated',-1)">‹</button>
+            <button class="row-btn" onclick="scrollRow('toprated',1)">›</button>
+          </div>
+        </div>
+        <div class="cards-wrap"><div class="cards-row" id="row-toprated"></div></div>
+      </section>
+
+      <section class="row-section">
+        <div class="row-header">
+          <div class="row-title" id="mood-row-title">💡 Based on Your Mood</div>
+          <div class="row-actions">
+            <button class="row-btn" onclick="scrollRow('mood',-1)">‹</button>
+            <button class="row-btn" onclick="scrollRow('mood',1)">›</button>
+          </div>
+        </div>
+        <div class="cards-wrap"><div class="cards-row" id="row-mood"></div></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ═══ TRENDING PAGE ═══ -->
+  <div class="page" id="page-trending">
+    <div class="page-header"><h2>🔥 Trending This Week</h2><span class="page-subtext" id="trending-count"></span></div>
+    <div class="page-grid" id="grid-trending"></div>
+  </div>
+
+  <!-- ═══ MOVIES PAGE ═══ -->
+  <div class="page" id="page-movies">
+    <div class="page-header"><h2>🎬 Movies</h2></div>
+    <div class="filter-bar" id="movie-filters"></div>
+    <div class="page-grid" id="grid-movies"></div>
+  </div>
+
+  <!-- ═══ TV SHOWS PAGE ═══ -->
+  <div class="page" id="page-tvshows">
+    <div class="page-header"><h2>📺 TV Shows</h2></div>
+    <div class="filter-bar" id="tv-filters"></div>
+    <div class="page-grid" id="grid-tvshows"></div>
+  </div>
+
+  <!-- ═══ MY LIST PAGE ═══ -->
+  <div class="page" id="page-mylist">
+    <div class="page-header"><h2>➕ My List</h2><span class="page-subtext" id="mylist-count"></span></div>
+    <div class="page-grid" id="grid-mylist">
+      <div class="empty-state" id="mylist-empty" style="grid-column:1/-1">
+        <div class="big-icon">📋</div>
+        <h3>Your list is empty</h3>
+        <p>Browse movies and tap the + button on any card to add it here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HISTORY PAGE ═══ -->
+  <div class="page" id="page-history">
+    <div class="page-header"><h2>⏱ Watch History</h2></div>
+    <div id="history-list">
+      <div class="empty-state">
+        <div class="big-icon">🕐</div>
+        <h3>No history yet</h3>
+        <p>Movies you watch will appear here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS PAGE ═══ -->
+  <div class="page" id="page-settings">
+    <div class="page-header"><h2>⚙️ Settings</h2></div>
+    <div class="settings-body">
+      <div class="settings-section">
+        <h3>Account</h3>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Profile Name</strong><span>Dipanjana</span></div>
+          <button class="btn-ai-out" style="padding:7px 14px;font-size:12px">Edit</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Plan</strong><span>Free — Limited access</span></div>
+          <button class="btn-ai" style="padding:7px 14px;font-size:12px">Upgrade</button>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>Playback</h3>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Autoplay Next Episode</strong><span>Automatically play the next title</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Autoplay Previews</strong><span>Play previews while browsing</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Data Saver</strong><span>Reduce streaming quality to save data</span></div>
+          <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>AI & Emotion</h3>
+        <div class="setting-row">
+          <div class="setting-label"><strong>AI Emotion Detection</strong><span>Use camera to detect mood</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Free Fallback AI</strong><span>Use on-device AI when GPT-4 quota exceeded</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>Notifications</h3>
+        <div class="setting-row">
+          <div class="setting-label"><strong>New Releases</strong><span>Get notified about new content</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><strong>Recommendations</strong><span>Personalized movie suggestions</span></div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOVIE MODAL -->
+<div id="modal-bg" onclick="closeModal(event)">
+  <div id="modal">
+    <div class="modal-hero">
+      <img id="modal-img" src="" alt=""/>
+      <div class="modal-hero-ov"></div>
+      <div class="modal-close" onclick="closeModalDirect()">✕</div>
+    </div>
+    <div class="modal-body">
+      <h2 id="modal-title"></h2>
+      <div class="modal-tagline" id="modal-tagline"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div id="modal-cast-wrap" style="display:none">
+        <div class="modal-cast"><h4>Cast</h4><div class="cast-list" id="cast-list"></div></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-play" id="modal-play-btn">▶ Play Now</button>
+        <button class="btn-wishlist" id="modal-wishlist-btn" onclick="toggleWishlistFromModal()">➕ My List</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div id="player-bg" onclick="closePlayer(event)">
+  <div style="position:relative;width:90%;max-width:900px">
+    <div class="player-title" id="player-title"></div>
+    <div style="position:relative">
+      <div class="player-close" onclick="closePlayerDirect()" style="position:absolute;top:-44px;right:0">✕</div>
+      <div id="player-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FACE MODAL -->
+<div id="face-bg" onclick="closeFaceModal(event)">
+  <div id="face-modal">
+    <div class="face-close" onclick="closeFaceModalDirect()">✕</div>
+    <h2>🤖 AI Emotion Scanner</h2>
+    <p class="fm-sub">Position your face in the frame, then click Capture. GPT-4 Vision reads your expression — with free on-device AI as backup.</p>
+    <div id="cam-box">
+      <video id="camVideo" autoplay playsinline muted></video>
+      <canvas id="camCanvas"></canvas>
+      <div class="scan-line" id="scanLine"></div>
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div id="cam-status">📷 Starting camera...</div>
+    </div>
+    <div class="cam-btns">
+      <button class="btn-ai-out" onclick="closeFaceModalDirect()">Cancel</button>
+      <button class="btn-ai" id="captureBtn" onclick="captureAndDetect()" disabled>📸 Capture &amp; Detect</button>
+    </div>
+  </div>
+</div>
+
+<!-- PREMIUM MODAL -->
+<div id="premium-bg" onclick="closePremiumModal(event)">
+  <div id="premium-modal">
+    <div class="face-close" onclick="closePremiumModalDirect()">✕</div>
+    <div class="premium-header">
+      <div class="premium-crown">👑</div>
+      <h2>Upgrade to EmotiStream Premium</h2>
+      <p class="fm-sub">Unlock unlimited AI emotion scans, zero ads, and 4K streaming.</p>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card" data-plan="monthly" onclick="selectPlan(this)">
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">₹199<span>/mo</span></div>
+        <div class="plan-feat">Billed every month</div>
+      </div>
+      <div class="plan-card popular" data-plan="yearly" onclick="selectPlan(this)">
+        <div class="plan-badge">BEST VALUE</div>
+        <div class="plan-name">Yearly</div>
+        <div class="plan-price">₹1,499<span>/yr</span></div>
+        <div class="plan-feat">Save 37% — ₹125/mo</div>
+      </div>
+      <div class="plan-card" data-plan="family" onclick="selectPlan(this)">
+        <div class="plan-name">Family</div>
+        <div class="plan-price">₹349<span>/mo</span></div>
+        <div class="plan-feat">Up to 5 profiles</div>
+      </div>
+    </div>
+    <ul class="premium-perks">
+      <li>✅ Unlimited AI emotion scans (GPT-4 Vision)</li>
+      <li>✅ No ads, ever</li>
+      <li>✅ 4K Ultra HD streaming</li>
+      <li>✅ Download for offline viewing</li>
+      <li>✅ Priority customer support</li>
+    </ul>
+    <button class="btn-ai" style="width:100%;justify-content:center;padding:13px" onclick="confirmSubscribe()">Continue with Selected Plan</button>
+    <p class="premium-fine">This is a demo checkout — no real payment will be taken.</p>
+  </div>
+</div>
+
+
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

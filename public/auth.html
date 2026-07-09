@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EmotiStream AI — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--surface:#111118;--surface2:#1a1a26;--border:rgba(255,255,255,0.08);
+  --pink:#e91e8c;--pink-glow:rgba(233,30,140,0.35);--purple:#7c3aed;
+  --text:#f0f0f8;--muted:#8888aa;--radius:14px;--error:#ef4444;--success:#22c55e;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative;overflow-x:hidden}
+
+/* BG GRADIENT */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(124,58,237,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(233,30,140,.12) 0%,transparent 60%);pointer-events:none}
+
+/* PARTICLES */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:pfloat var(--dur) var(--delay) infinite ease-in-out}
+@keyframes pfloat{0%{opacity:0;transform:translateY(0) scale(0)}10%{opacity:.4}90%{opacity:.1}100%{opacity:0;transform:translateY(-80vh) scale(1.5)}}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:440px;position:relative;z-index:1}
+.screen.active{display:flex}
+
+/* LOGO */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:32px;cursor:pointer}
+.logo-wrap svg{width:70px;height:70px;filter:drop-shadow(0 0 20px var(--pink-glow));animation:floatY 3s ease-in-out infinite}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.wordmark{font-size:28px;font-weight:900;letter-spacing:-.5px}
+.wordmark .e{color:#fff}.wordmark .s{background:linear-gradient(90deg,#e91e8c,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.wordmark sup{font-size:10px;color:#7c3aed;-webkit-text-fill-color:#7c3aed;vertical-align:super}
+.tagline{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+
+/* CARD */
+.card{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.card h2{font-size:22px;font-weight:800;margin-bottom:6px}
+.card .sub{font-size:13px;color:var(--muted);margin-bottom:26px;line-height:1.5}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;letter-spacing:.5px;text-transform:uppercase}
+.form-group input,.form-group select{width:100%;padding:12px 16px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+.form-group input::placeholder{color:var(--muted)}
+.form-group input:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+.form-group input.error-field{border-color:var(--error)}
+.form-group .pw-wrap{position:relative}
+.form-group .pw-wrap input{padding-right:44px}
+.toggle-pw{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted);font-size:16px;user-select:none}
+
+/* BUTTONS */
+.btn-main{width:100%;padding:13px;background:linear-gradient(90deg,var(--pink),var(--purple));border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-top:4px}
+.btn-main:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 24px var(--pink-glow)}
+.btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{width:100%;padding:11px;background:transparent;border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s;margin-top:8px}
+.btn-ghost:hover{background:var(--surface2);border-color:rgba(255,255,255,.15)}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* LINK */
+.link-row{text-align:center;font-size:13px;color:var(--muted);margin-top:20px}
+.link-row a{color:var(--pink);cursor:pointer;font-weight:600;text-decoration:none}
+.link-row a:hover{text-decoration:underline}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
+.alert.show{display:block}
+.alert.error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+.alert.success{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#86efac}
+
+/* AVATAR PICKER */
+.avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.avatar-opt{font-size:28px;text-align:center;padding:10px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .2s;background:var(--surface2)}
+.avatar-opt:hover{border-color:rgba(233,30,140,.4);transform:scale(1.1)}
+.avatar-opt.selected{border-color:var(--pink);background:rgba(233,30,140,.12);box-shadow:0 0 0 3px var(--pink-glow)}
+
+/* STRENGTH BAR */
+.strength-bar{height:4px;border-radius:2px;margin-top:6px;transition:all .3s;background:var(--surface2)}
+.strength-bar .fill{height:100%;border-radius:2px;transition:all .3s;width:0}
+.strength-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* PROFILE SWITCHER */
+.profiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;margin-bottom:20px}
+.profile-tile{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px 12px;cursor:pointer;text-align:center;transition:all .2s;position:relative}
+.profile-tile:hover{border-color:rgba(233,30,140,.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.profile-tile.add-new{border-style:dashed;background:transparent}
+.profile-tile.add-new:hover{border-color:var(--pink)}
+.profile-avatar{font-size:42px;margin-bottom:8px;display:block}
+.profile-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-delete{position:absolute;top:6px;right:8px;width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,.15);border:none;cursor:pointer;color:#fca5a5;font-size:12px;display:none;align-items:center;justify-content:center}
+.profile-tile:hover .profile-delete{display:flex}
+.manage-btn{font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;text-align:center;width:100%;margin-top:4px;padding:4px}
+.manage-btn:hover{color:var(--text)}
+
+/* SPINNER */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* DEMO BADGE */
+.demo-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:50px;font-size:12px;color:#a78bfa;cursor:pointer;margin-bottom:16px;transition:background .2s;width:100%;justify-content:center}
+.demo-pill:hover{background:rgba(124,58,237,.25)}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="screen active" id="screen-login">
+  <div class="logo-wrap" onclick="window.location='/'">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="g1" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#7c3aed"/></radialGradient></defs>
+      <circle cx="40" cy="44" r="32" fill="url(#g1)"/>
+      <path d="M28 38 Q32 34 36 38" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M44 36 Q47 32 50 36" stroke="#1a0a00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="50" cy="43" rx="2" ry="3" fill="rgba(52,152,219,.9)"/>
+      <circle cx="40" cy="44" r="8" fill="rgba(255,255,255,.88)"/>
+      <polygon points="37.5,40.5 37.5,47.5 44,44" fill="#1a0a00"/>
+      <path d="M24 54 Q33 62 39 57" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M41 58 Q47 52 56 56" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+    <div class="tagline">Streaming that understands you</div>
+  </div>
+
+  <div class="card">
+    <h2>Welcome back 👋</h2>
+    <p class="sub">Sign in to your account to continue</p>
+
+    <button class="demo-pill" onclick="fillDemo()">🎭 Try the demo account — no sign-up needed</button>
+
+    <div class="alert error" id="login-error"></div>
+    <div class="alert success" id="login-success"></div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="login-email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="login-password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <span class="toggle-pw" onclick="togglePw('login-password',this)">👁</span>
+      </div>
+    </div>
+    <button class="btn-main" id="login-btn" onclick="doLogin()">Sign In</button>
+    <button class="btn-ghost" onclick="showScreen('screen-signup')">Create a new account</button>
+
+    <div class="link-row" style="margin-top:14px">
+      <a onclick="showScreen('screen-forgot')">Forgot your password?</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SIGNUP ═══ -->
+<div class="screen" id="screen-signup">
+  <div class="logo-wrap" onclick="showScreen('screen-login')">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="g2" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#7c3aed"/></radialGradient></defs>
+      <circle cx="40" cy="44" r="32" fill="url(#g2)"/>
+      <path d="M28 38 Q32 34 36 38" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M44 36 Q47 32 50 36" stroke="#1a0a00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="50" cy="43" rx="2" ry="3" fill="rgba(52,152,219,.9)"/>
+      <circle cx="40" cy="44" r="8" fill="rgba(255,255,255,.88)"/>
+      <polygon points="37.5,40.5 37.5,47.5 44,44" fill="#1a0a00"/>
+      <path d="M24 54 Q33 62 39 57" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M41 58 Q47 52 56 56" stroke="#1a0a00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+  </div>
+
+  <div class="card">
+    <h2>Create your account ✨</h2>
+    <p class="sub">Join EmotiStream and let AI find your perfect movie</p>
+
+    <div class="alert error" id="signup-error"></div>
+    <div class="alert success" id="signup-success"></div>
+
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="signup-name" placeholder="e.g. Dipanjana"/>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="signup-email" placeholder="you@example.com"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="signup-password" placeholder="Minimum 6 characters" oninput="checkStrength(this.value)"/>
+        <span class="toggle-pw" onclick="togglePw('signup-password',this)">👁</span>
+      </div>
+      <div class="strength-bar"><div class="fill" id="strength-fill"></div></div>
+      <div class="strength-label" id="strength-label"></div>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="signup-confirm" placeholder="Re-enter your password"/>
+        <span class="toggle-pw" onclick="togglePw('signup-confirm',this)">👁</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Choose your Avatar</label>
+      <div class="avatar-grid" id="avatar-grid">
+        <div class="avatar-opt selected" data-emoji="😊" onclick="selectAvatar(this)">😊</div>
+        <div class="avatar-opt" data-emoji="🎬" onclick="selectAvatar(this)">🎬</div>
+        <div class="avatar-opt" data-emoji="🎭" onclick="selectAvatar(this)">🎭</div>
+        <div class="avatar-opt" data-emoji="🌟" onclick="selectAvatar(this)">🌟</div>
+        <div class="avatar-opt" data-emoji="🎵" onclick="selectAvatar(this)">🎵</div>
+        <div class="avatar-opt" data-emoji="🦁" onclick="selectAvatar(this)">🦁</div>
+        <div class="avatar-opt" data-emoji="🌸" onclick="selectAvatar(this)">🌸</div>
+        <div class="avatar-opt" data-emoji="🐯" onclick="selectAvatar(this)">🐯</div>
+      </div>
+    </div>
+    <button class="btn-main" id="signup-btn" onclick="doSignup()">Create Account</button>
+    <div class="link-row">Already have an account? <a onclick="showScreen('screen-login')">Sign in</a></div>
+  </div>
+</div>
+
+<!-- ═══ FORGOT PASSWORD ═══ -->
+<div class="screen" id="screen-forgot">
+  <div class="logo-wrap" onclick="showScreen('screen-login')">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="g3" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#7c3aed"/></radialGradient></defs>
+      <circle cx="40" cy="44" r="32" fill="url(#g3)"/>
+      <circle cx="40" cy="44" r="8" fill="rgba(255,255,255,.88)"/>
+      <polygon points="37.5,40.5 37.5,47.5 44,44" fill="#1a0a00"/>
+    </svg>
+    <div class="wordmark"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+  </div>
+  <div class="card">
+    <h2>Reset your password 🔑</h2>
+    <p class="sub">Enter the email linked to your account and we will send reset instructions. (Demo: this shows a mock response.)</p>
+    <div class="alert error" id="forgot-error"></div>
+    <div class="alert success" id="forgot-success"></div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="forgot-email" placeholder="you@example.com"/>
+    </div>
+    <button class="btn-main" onclick="doForgot()">Send Reset Link</button>
+    <button class="btn-ghost" onclick="showScreen('screen-login')">← Back to Sign In</button>
+  </div>
+</div>
+
+<!-- ═══ PROFILE SWITCHER ═══ -->
+<div class="screen" id="screen-profiles">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="g4" cx="40%" cy="40%" r="65%"><stop offset="0%" stop-color="#FFB347"/><stop offset="50%" stop-color="#e91e8c"/><stop offset="100%" stop-color="#7c3aed"/></radialGradient></defs>
+      <circle cx="40" cy="44" r="32" fill="url(#g4)"/>
+      <circle cx="40" cy="44" r="8" fill="rgba(255,255,255,.88)"/>
+      <polygon points="37.5,40.5 37.5,47.5 44,44" fill="#1a0a00"/>
+    </svg>
+    <div class="wordmark"><span class="e">Emoti</span><span class="s">Stream</span><sup>AI</sup></div>
+  </div>
+  <h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Who's watching?</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Select your profile to continue</p>
+  <div class="profiles-grid" id="profiles-grid"></div>
+  <button class="btn-ghost" style="max-width:320px;margin-top:4px" onclick="doLogout()">Sign out</button>
+  <p style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center">Signed in as <span id="signed-in-email" style="color:var(--pink)"></span></p>
+</div>
+
+<!-- ═══ ADD PROFILE ═══ -->
+<div class="screen" id="screen-add-profile">
+  <div class="card" style="max-width:380px;width:100%">
+    <h2 style="margin-bottom:6px">Add a Profile ➕</h2>
+    <p class="sub">Up to 5 profiles per account</p>
+    <div class="alert error" id="addp-error"></div>
+    <div class="form-group">
+      <label>Profile Name</label>
+      <input type="text" id="addp-name" placeholder="e.g. Kids, Partner, Me"/>
+    </div>
+    <div class="form-group">
+      <label>Choose Avatar</label>
+      <div class="avatar-grid" id="addp-avatar-grid">
+        <div class="avatar-opt selected" data-emoji="🎬" onclick="selectAddpAvatar(this)">🎬</div>
+        <div class="avatar-opt" data-emoji="🧒" onclick="selectAddpAvatar(this)">🧒</div>
+        <div class="avatar-opt" data-emoji="👦" onclick="selectAddpAvatar(this)">👦</div>
+        <div class="avatar-opt" data-emoji="👧" onclick="selectAddpAvatar(this)">👧</div>
+        <div class="avatar-opt" data-emoji="🎵" onclick="selectAddpAvatar(this)">🎵</div>
+        <div class="avatar-opt" data-emoji="🌟" onclick="selectAddpAvatar(this)">🌟</div>
+        <div class="avatar-opt" data-emoji="🦁" onclick="selectAddpAvatar(this)">🦁</div>
+        <div class="avatar-opt" data-emoji="🐯" onclick="selectAddpAvatar(this)">🐯</div>
+      </div>
+    </div>
+    <button class="btn-main" onclick="doAddProfile()">Save Profile</button>
+    <button class="btn-ghost" onclick="showScreen('screen-profiles')">Cancel</button>
+  </div>
+</div>
+
+<script>
+/* ════ PARTICLES ════ */
+(function(){
+  const pc=document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const d=document.createElement('div');d.className='particle';
+    const s=Math.random()*4+2;
+    d.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${Math.random()>.5?'#e91e8c':'#7c3aed'};--dur:${7+Math.random()*10}s;--delay:${Math.random()*8}s;opacity:0;filter:blur(1px)`;
+    pc.appendChild(d);
+  }
+})();
+
+/* ════ STATE ════ */
+let currentUser = null;
+let selectedAvatarEmoji = '😊';
+let selectedAddpAvatarEmoji = '🎬';
+
+/* ════ UTILS ════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  clearAlerts();
+}
+function showAlert(id, msg, type='error'){
+  const el=document.getElementById(id);
+  el.textContent=msg; el.className=`alert ${type} show`;
+}
+function clearAlerts(){
+  document.querySelectorAll('.alert').forEach(a=>{a.classList.remove('show');a.textContent='';});
+}
+function setLoading(btnId, loading, label=''){
+  const btn=document.getElementById(btnId);
+  btn.disabled=loading;
+  btn.innerHTML=loading?`<span class="spinner"></span>Checking...`:label||btn.dataset.label||btn.innerHTML;
+  if(label) btn.dataset.label=label;
+}
+function togglePw(inputId, icon){
+  const input=document.getElementById(inputId);
+  if(input.type==='password'){input.type='text';icon.textContent='🙈';}
+  else{input.type='password';icon.textContent='👁';}
+}
+function selectAvatar(el){
+  document.querySelectorAll('#avatar-grid .avatar-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAvatarEmoji=el.dataset.emoji;
+}
+function selectAddpAvatar(el){
+  document.querySelectorAll('#addp-avatar-grid .avatar-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAddpAvatarEmoji=el.dataset.emoji;
+}
+
+/* ════ PASSWORD STRENGTH ════ */
+function checkStrength(pw){
+  const fill=document.getElementById('strength-fill');
+  const label=document.getElementById('strength-label');
+  if(!pw){fill.style.width='0';label.textContent='';return;}
+  let score=0;
+  if(pw.length>=6) score++;
+  if(pw.length>=10) score++;
+  if(/[A-Z]/.test(pw)) score++;
+  if(/[0-9]/.test(pw)) score++;
+  if(/[^A-Za-z0-9]/.test(pw)) score++;
+  const levels=[
+    {w:'20%',color:'#ef4444',text:'Very weak'},
+    {w:'40%',color:'#f97316',text:'Weak'},
+    {w:'60%',color:'#eab308',text:'Fair'},
+    {w:'80%',color:'#22c55e',text:'Strong'},
+    {w:'100%',color:'#16a34a',text:'Very strong'},
+  ];
+  const l=levels[Math.min(score,4)];
+  fill.style.width=l.w; fill.style.background=l.color;
+  label.textContent=l.text; label.style.color=l.color;
+}
+
+/* ════ API ════ */
+async function api(method, path, body){
+  const token=localStorage.getItem('emoti_token');
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(token) opts.headers['Authorization']='Bearer '+token;
+  if(body)  opts.body=JSON.stringify(body);
+  const res=await fetch(path,opts);
+  const data=await res.json();
+  if(!res.ok) throw new Error(data.error||'Something went wrong');
+  return data;
+}
+
+/* ════ DEMO FILL ════ */
+function fillDemo(){
+  document.getElementById('login-email').value='demo@emotistream.com';
+  document.getElementById('login-password').value='demo1234';
+  showAlert('login-success','Demo credentials filled! Click Sign In.','success');
+}
+
+/* ════ LOGIN ════ */
+async function doLogin(){
+  clearAlerts();
+  const email=document.getElementById('login-email').value.trim();
+  const password=document.getElementById('login-password').value;
+  if(!email||!password){showAlert('login-error','Please enter your email and password.');return;}
+  setLoading('login-btn',true,'Sign In');
+  try{
+    const data=await api('POST','/api/auth/login',{email,password});
+    localStorage.setItem('emoti_token',data.token);
+    localStorage.setItem('emoti_user',JSON.stringify(data.user));
+    currentUser=data.user;
+    renderProfileSwitcher();
+    showScreen('screen-profiles');
+  }catch(e){
+    showAlert('login-error',e.message);
+  }finally{
+    setLoading('login-btn',false,'Sign In');
+  }
+}
+
+/* ════ SIGNUP ════ */
+async function doSignup(){
+  clearAlerts();
+  const name=document.getElementById('signup-name').value.trim();
+  const email=document.getElementById('signup-email').value.trim();
+  const password=document.getElementById('signup-password').value;
+  const confirm=document.getElementById('signup-confirm').value;
+  if(!name||!email||!password||!confirm){showAlert('signup-error','Please fill in all fields.');return;}
+  if(password!==confirm){showAlert('signup-error','Passwords do not match.');return;}
+  if(password.length<6){showAlert('signup-error','Password must be at least 6 characters.');return;}
+  setLoading('signup-btn',true,'Create Account');
+  try{
+    const data=await api('POST','/api/auth/register',{name,email,password,avatar:selectedAvatarEmoji});
+    localStorage.setItem('emoti_token',data.token);
+    localStorage.setItem('emoti_user',JSON.stringify(data.user));
+    currentUser=data.user;
+    showAlert('signup-success','Account created! Welcome to EmotiStream 🎉','success');
+    setTimeout(()=>{renderProfileSwitcher();showScreen('screen-profiles');},1200);
+  }catch(e){
+    showAlert('signup-error',e.message);
+  }finally{
+    setLoading('signup-btn',false,'Create Account');
+  }
+}
+
+/* ════ FORGOT PASSWORD ════ */
+function doForgot(){
+  const email=document.getElementById('forgot-email').value.trim();
+  if(!email){showAlert('forgot-error','Please enter your email.');return;}
+  showAlert('forgot-success',`If an account exists for ${email}, a reset link has been sent. (Demo mode — no actual email sent.)`, 'success');
+}
+
+/* ════ PROFILE SWITCHER ════ */
+function renderProfileSwitcher(){
+  if(!currentUser) return;
+  document.getElementById('signed-in-email').textContent=currentUser.email;
+  const grid=document.getElementById('profiles-grid');
+  const profiles=currentUser.profiles||[];
+  let html=profiles.map(p=>`
+    <div class="profile-tile" onclick="selectProfile(${p.id})">
+      <button class="profile-delete" onclick="event.stopPropagation();removeProfile(${p.id})" title="Remove">✕</button>
+      <span class="profile-avatar">${p.avatar||'🎬'}</span>
+      <div class="profile-name">${p.name}</div>
+    </div>`).join('');
+  if(profiles.length<5){
+    html+=`<div class="profile-tile add-new" onclick="showScreen('screen-add-profile')">
+      <span class="profile-avatar">➕</span>
+      <div class="profile-name">Add Profile</div>
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+
+function selectProfile(profileId){
+  if(!currentUser) return;
+  const profile=currentUser.profiles.find(p=>p.id===profileId);
+  if(!profile) return;
+  // Store selected profile and go to main app
+  localStorage.setItem('emoti_profile',JSON.stringify(profile));
+  window.location.href='/index.html';
+}
+
+async function removeProfile(profileId){
+  if(!confirm('Remove this profile?')) return;
+  try{
+    const data=await api('DELETE',`/api/auth/remove-profile/${profileId}`);
+    currentUser.profiles=data.profiles;
+    localStorage.setItem('emoti_user',JSON.stringify(currentUser));
+    renderProfileSwitcher();
+  }catch(e){alert(e.message);}
+}
+
+/* ════ ADD PROFILE ════ */
+async function doAddProfile(){
+  const name=document.getElementById('addp-name').value.trim();
+  if(!name){showAlert('addp-error','Please enter a profile name.');return;}
+  try{
+    const data=await api('POST','/api/auth/add-profile',{name,avatar:selectedAddpAvatarEmoji});
+    currentUser.profiles=data.profiles;
+    localStorage.setItem('emoti_user',JSON.stringify(currentUser));
+    renderProfileSwitcher();
+    showScreen('screen-profiles');
+  }catch(e){showAlert('addp-error',e.message);}
+}
+
+/* ════ LOGOUT ════ */
+function doLogout(){
+  localStorage.removeItem('emoti_token');
+  localStorage.removeItem('emoti_user');
+  localStorage.removeItem('emoti_profile');
+  currentUser=null;
+  showScreen('screen-login');
+}
+
+/* ════ BOOT — check if already logged in ════ */
+(async function(){
+  const token=localStorage.getItem('emoti_token');
+  const savedUser=localStorage.getItem('emoti_user');
+  if(token && savedUser){
+    try{
+      // Verify token is still valid
+      const data=await api('GET','/api/auth/me');
+      currentUser=data.user;
+      localStorage.setItem('emoti_user',JSON.stringify(currentUser));
+      renderProfileSwitcher();
+      showScreen('screen-profiles');
+    }catch(e){
+      // Token expired — show login
+      localStorage.removeItem('emoti_token');
+      localStorage.removeItem('emoti_user');
+      showScreen('screen-login');
+    }
+  }
+})();
+</script>
+</body>
+</html>
