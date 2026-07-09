@@ -217,7 +217,7 @@ Every star motivates me to build even better AI-powered applications.
 
 ## 🚀 Built with React, Vite, Artificial Intelligence & TMDB API
 
----
+
 
 ### ❤️ Made with passion by Dipanjana Ghosh
 
